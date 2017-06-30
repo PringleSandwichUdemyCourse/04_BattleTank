@@ -7,7 +7,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto ControlledTank = GetAITank();
+	auto ControlledTank = GetControlledTank();
 	if (!ControlledTank)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No Pawn for AI to Control"));
@@ -28,16 +28,32 @@ void ATankAIController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player Tank Targeted"));
 	}
-
-
-
 }
 
 
-ATank* ATankAIController::GetAITank() const
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetPlayerTank())
+	{
+		// TODO Move Towards the Player
+
+		// Aim Towards the Player
+		GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
+
+
+		// TODO Fire if ready
+
+	}
+}
+
+
+ATank* ATankAIController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
 }
+
 
 ATank* ATankAIController::GetPlayerTank() const
 {
